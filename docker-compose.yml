@@ -21,7 +21,7 @@ services:
     volumes:
       - esdata1:/usr/share/elasticsearch/data
       - eslog:/usr/share/elasticsearch/logs
-      - ./docker-elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
   kibana:
     image: docker.elastic.co/kibana/kibana:6.0.0
     ports:
