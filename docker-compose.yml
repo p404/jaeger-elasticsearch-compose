@@ -7,7 +7,7 @@ services:
     container_name: els
     hostname: els
     networks:
-    - web
+    - elastic-jaeger
     environment:
       - bootstrap.memory_lock=true
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
@@ -31,7 +31,7 @@ services:
     depends_on:
     - els
     networks:
-    - web
+    - elastic-jaeger
   jaeger-collector:
     image: jaegertracing/jaeger-collector:latest
     ports:
@@ -44,7 +44,7 @@ services:
     hostname: jaeger-collector
     restart: unless-stopped
     networks:
-    - web
+    - elastic-jaeger
     command: ["/go/bin/collector-linux", "--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200"]
   jaeger-agent:
     image: jaegertracing/jaeger-agent:latest
@@ -60,7 +60,7 @@ services:
     container_name: jaeger-agent
     hostname: jaeger-agent
     networks:
-    - web
+    - elastic-jaeger
     command: ["/go/bin/agent-linux", "--collector.host-port=jaeger-collector:14267"]
 
   jaeger-query:
@@ -74,7 +74,7 @@ services:
     container_name: jaeger-query
     hostname: jaeger-query
     networks:
-    - web
+    - elastic-jaeger
     command: ["/go/bin/query-linux", "--span-storage.type=elasticsearch", "--es.server-urls=http://els:9200", "--es.sniffer=false", "--query.static-files=/go/jaeger-ui/", "--log-level=debug"]
 volumes:
   esdata1:
@@ -82,5 +82,5 @@ volumes:
   eslog:
     driver: local
 networks:
-  web:
+  elastic-jaeger:
     driver: bridge
